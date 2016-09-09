@@ -1,10 +1,10 @@
-int ledPins[] = {11,9};
-int ledState[] = {3,6};
+int ledPins[] = {1,2,3,4};
+int ledState[] = {0,0,0,0};
 int factor = 255/6;
-int buttonPins[] = {2,4,7,8,12};
+int buttonPins[] = {5,6,7,8,9};
 int buttonPressed[] = {0,0,0,0,0};
 int selection = 0;
-boolean on = true;
+boolean on = false;
 
 void setup() {
   for (int i = 0; i < sizeof(ledPins); i++) {
@@ -16,10 +16,8 @@ void setup() {
 }
 
 void displayLEDS() {
-  if (on) {
-    for (int i = 0; i < sizeof(ledPins); i++) {
-      analogWrite(ledPins[i], ledState[i]*factor);
-    }
+  for (int i = 0; i < sizeof(ledPins); i++) {
+    analogWrite(ledPins[i], ledState[i]*factor);
   }
 }
 
@@ -42,6 +40,7 @@ void clickButton(int x) {
     case 0:     //turn kookplaat on or off
       if (on) {
         on = false;
+        resetPinStates();
       } else {
         on = true;
       }
@@ -58,13 +57,19 @@ void clickButton(int x) {
         selection = sizeof(ledPins);
       }
     case 3:     //put LED higher
-      if (ledState[selection] < 6) {
+      if (on && ledState[selection] < 6) {
         ledState[selection]++;
       }
     case 4:     //put LED lower
       if (ledState[selection] > 0) {
         ledState[selection]--;
       }
+  }
+}
+
+void resetPinStates() {
+  for (int i = 0; i < sizeof(pinState); i++) {
+    pinState[i] = 0;
   }
 }
 
