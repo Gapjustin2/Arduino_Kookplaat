@@ -6,6 +6,9 @@ int buttonPressed[] = {0, 0, 0, 0, 0};
 int ledPinsSize = sizeof(ledPins) / sizeof(int);
 int buttonPinsSize = sizeof(buttonPins) / sizeof(int);
 int selection = 0;
+int latchPin = 5; //pin 12 of 595
+int dataPin = 3; //pin 14 on the 595
+int clockPin = 9; //pin 11 on the 595
 boolean on = true;
 
 int zero[] = {1, 1, 1, 0, 1, 1, 1};
