@@ -118,59 +118,64 @@ void loop() {
   display(i)
   }
 }
+void shiftOutNumber(number){
+  digitalWrite(latchPin, LOW);
+  shiftOut(dataPin, clockPin, MSBFIRST, number);
+  shiftOut(dataPin, clockPin, MSBFIRST, (number >> 8));
+  //Serial.println(data >> 8);
+  digitalWrite(latchPin, HIGH);
+}
 
 void display(displaynumber){
+    switch(ledState[displaynumber]{
+        int calcvar = 128*Math.pow(2, displaynumber);
+        case 0
+            shiftOutNumber(320+calcvar);
+        break;
+        case 1
+            shiftOutNumber(377+calcvar);
+        break;
+        case 2
+            shiftOutNumber(292+calcvar);
+        break;
+        case 3
+            shiftOutNumber(304+calcvar);
+        break;
+        case 4
+            shiftOutNumber(281+calcvar);
+        break;
+        case 5
+            shiftOutNumber(274+calcvar);
+        break;
+        case 6
+            shiftOutNumber(258+calcvar);
+        break;
+    }
+}
+/*void display(displaynumber){
 switch(displaynumber){
 case 0
 switch(ledState[displaynumber]{
 case 0
-  digitalWrite(latchPin, LOW);
-  shiftOut(dataPin, clockPin, MSBFIRST, 448);
-  shiftOut(dataPin, clockPin, MSBFIRST, (448 >> 8));
-  //Serial.println(data >> 8);
-  digitalWrite(latchPin, HIGH);
+    shiftOutNumber(448);
 break;
 case 1
-  digitalWrite(latchPin, LOW);
-  shiftOut(dataPin, clockPin, MSBFIRST, 505);
-  shiftOut(dataPin, clockPin, MSBFIRST, (505 >> 8));
-  //Serial.println(data >> 8);
-  digitalWrite(latchPin, HIGH);
+    shiftOutNumber(505);
 break;
 case 2
-  digitalWrite(latchPin, LOW);
-  shiftOut(dataPin, clockPin, MSBFIRST, 420);
-  shiftOut(dataPin, clockPin, MSBFIRST, (420 >> 8));
-  //Serial.println(data >> 8);
-  digitalWrite(latchPin, HIGH);
+    shiftOutNumber(420);
 break;
 case 3
-  digitalWrite(latchPin, LOW);
-  shiftOut(dataPin, clockPin, MSBFIRST, 432);
-  shiftOut(dataPin, clockPin, MSBFIRST, (432 >> 8));
-  //Serial.println(data >> 8);
-  digitalWrite(latchPin, HIGH);
+    shiftOutNumber(432);
 break;
 case 4
-  digitalWrite(latchPin, LOW);
-  shiftOut(dataPin, clockPin, MSBFIRST, 409);
-  shiftOut(dataPin, clockPin, MSBFIRST, (409 >> 8));
-  //Serial.println(data >> 8);
-  digitalWrite(latchPin, HIGH);
+    shiftOutNumber(409);
 break;
 case 5
-  digitalWrite(latchPin, LOW);
-  shiftOut(dataPin, clockPin, MSBFIRST, 402);
-  shiftOut(dataPin, clockPin, MSBFIRST, (402 >> 8));
-  //Serial.println(data >> 8);
-  digitalWrite(latchPin, HIGH);
+    shiftOutNumber(402);
 break;
 case 6
-  digitalWrite(latchPin, LOW);
-  shiftOut(dataPin, clockPin, MSBFIRST, 386);
-  shiftOut(dataPin, clockPin, MSBFIRST, (386 >> 8));
-  //Serial.println(data >> 8);
-  digitalWrite(latchPin, HIGH);
+    shiftOutNumber(386);
 break;
 }
 break;
@@ -546,4 +551,4 @@ break;
 }
 break;
 }
-}
+}*/
