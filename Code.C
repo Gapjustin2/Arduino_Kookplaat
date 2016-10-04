@@ -54,7 +54,7 @@ void checkButtons() {
 void clickButton(int x) {
   switch (x) {
     case 0:     //turn kookplaat on or off
-    if (safetyOff0 && plaatSelectie == 0 || safetyOff1 && plaatSelectie == 0){
+        if (safetyOff0 && plaatSelectie == 0 || safetyOff1 && plaatSelectie == 0){
         Serial.println("on/of");
         if (on) {
             on = false;
