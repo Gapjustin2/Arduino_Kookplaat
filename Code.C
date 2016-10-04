@@ -1,5 +1,7 @@
-int ledPins[] = {11, 10};
+int ledPins[] = {11, 10}z;
 int ledState[] = {6, 6};
+int shiftOutNumbers[] = {320, 377, 292, 304, 281, 274, 258};
+int shiftOutVar[] = {128, 256, 512, 1024, 2048, 4096, 8192, 16384};
 int factor = 255 / 6;
 int buttonPins[] = {2, 4, 7, 8, 12};
 int buttonPressed[] = {0, 0, 0, 0, 0};
@@ -10,14 +12,6 @@ int latchPin = 5; //pin 12 of 595
 int dataPin = 3; //pin 14 on the 595
 int clockPin = 9; //pin 11 on the 595
 boolean on = true;
-
-int zero[] = {1, 1, 1, 0, 1, 1, 1};
-int one[] = {0, 0, 1, 0, 0, 1, 0};
-int two[] = {1, 0, 1, 1, 1, 0, 1};
-int three[] = {1, 1, 0, 1, 1, 0, 1};
-int four[] = {};
-int five[] = {};
-int six[] = {};
 
 
 void setup() {
@@ -127,33 +121,7 @@ void shiftOutNumber(number){
 }
 
 void display(displaynumber){
-int calcvar = 0;
-    for (i = 0; i <= displaynumber; i++){
-    calcvar += 128*Math.pow(2, displaynumber);
-    } 
-    switch(ledState[displaynumber]{
-        case 0
-            shiftOutNumber(320+calcvar);
-        break;
-        case 1
-            shiftOutNumber(377+calcvar);
-        break;
-        case 2
-            shiftOutNumber(292+calcvar);
-        break;
-        case 3
-            shiftOutNumber(304+calcvar);
-        break;
-        case 4
-            shiftOutNumber(281+calcvar);
-        break;
-        case 5
-            shiftOutNumber(274+calcvar);
-        break;
-        case 6
-            shiftOutNumber(258+calcvar);
-        break;
-    }
+    shiftOutNumber(shiftOutNumbers[ledState[displaynumber]]+shiftOutVar[displaynumber]);
 }
 /*void display(displaynumber){
 switch(displaynumber){
