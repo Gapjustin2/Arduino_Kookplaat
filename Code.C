@@ -1,7 +1,7 @@
-int ledPins[] = {11, 10};
-int ledState[] = {6, 6};
+int ledPins[] = {11, 10, 4, 8, 7, 6};
+int ledState[] = {6, 6, 2, 3, 0, 1};
 int shiftOutNumbers[] = {320, 377, 292, 304, 281, 274, 258};
-int shiftOutVar[] = {128, 256, 512, 1024, 2048, 4096, 8192, 16384};
+int shiftOutVar[] = {128, 384, 896, 1920, 3968, 8064, 1625616, 32640};
 int factor = 255 / 6;
 int buttonPins[] = {2, 4, 7, 8, 12};
 int buttonPressed[] = {0, 0, 0, 0, 0};
@@ -22,6 +22,9 @@ void setup() {
     pinMode(buttonPins[i], INPUT_PULLUP);
   }
   Serial.begin(9600);
+  pinMode(latchPin, OUTPUT);
+  pinMode(dataPin, OUTPUT);
+  pinMode(clockPin, OUTPUT);
 }
 
 void displayLEDS() {
@@ -114,12 +117,14 @@ void shiftOutNumber(int number){
 }
 
 void display(int displaynumber){
-    shiftOutNumber(shiftOutNumbers[ledState[displaynumber]]+shiftOutVar[displaynumber]);
+   shiftOutNumber(shiftOutNumbers[ledState[displaynumber]]+shiftOutVar[displaynumber]);
 }
 void loop() {
   checkButtons();
   displayLEDS();
-  for (int i = 0; i < ledPinsSize; i++){
+for(int i = 0; i < ledPinsSize; i++){
   display(i);
-  }
+  delay(1);
 }
+}
+ 
