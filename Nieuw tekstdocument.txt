@@ -1,0 +1,122 @@
+int numbers[] = {320, 377, 292, 304, 281, 274, 258};
+int factor = 255 / 6;
+
+int ledPins[] = {1, 2, 3, 4, 5, 6, 7, 8};
+int ledState[] = {0, 0, 0, 0, 0, 0, 0, 0};
+int shiftOutNumber[] = {448, 448, 448, 448, 448, 448, 448, 448};
+
+int buttonPins[] = {2, 4, 7, 8, 12};
+int buttonPressed[] = {0, 0, 0, 0, 0};
+
+int ledPinsSize = sizeof(ledPins) / sizeof(int);
+int buttonPinsSize = sizeof(buttonPins) / sizeof(int);
+
+int selection = 0;
+boolean on = true;
+
+int latchPin = 5; //pin 12 of 595
+int dataPin = 3; //pin 14 on the 595
+int clockPin = 9; //pin 11 on the 595
+
+void setup() {
+  for (int i = 0; i < ledPinsSize; i++) {
+    pinMode(ledPins[i], OUTPUT);
+  }
+  for (int i = 0; i < buttonPinsSize; i++) {
+    pinMode(buttonPins[i], INPUT_PULLUP);
+  }
+  Serial.begin(9600);
+}
+
+void displayLEDS() {
+  for (int i = 0; i < ledPinsSize; i++) {
+    analogWrite(ledPins[i], ledState[i]*factor);
+  }
+}
+
+void displayDISPLAY() {
+  for (int i = 0; i < ledPinsSize; i++) {
+    digitalWrite(latchPin, LOW);
+    shiftOut(dataPin, clockPin, MSBFIRST, shiftOutNumber[i]);
+    shiftOut(dataPin, clockPin, MSBFIRST, (shiftOutNumber[i] >> 8));
+    digitalWrite(latchPin, HIGH);
+  }
+}
+
+void checkButtons() {
+  for (int i = 0; i < buttonPinsSize; i++) {
+    int buttonState = digitalRead(buttonPins[i]);
+    if (buttonState == LOW) {
+      buttonPressed[i] = 1;
+    } else {
+      if (buttonPressed[i] == 1) {
+        clickButton(i);
+      }
+      buttonPressed[i] = 0;
+    }
+  }
+}
+
+void clickButton(int x) {
+  switch (x) {
+    case 0:     //turn kookplaat on or off
+      Serial.println("on/of");
+      if (on) {
+        on = false;
+        resetPinStates();
+      } else {
+        on = true;
+      }
+      Serial.println(on);
+      break;
+    case 1:     //select right LED
+      Serial.println("select right LED");
+      if (selection < ledPinsSize - 1) {
+        selection++;
+      } else {
+        selection = 0;
+      }
+      Serial.println(selection);
+      break;
+    case 2:     //select left LED
+      Serial.println("select left LED");
+      if (selection > 0) {
+        selection--;
+      } else {
+        selection = ledPinsSize - 1;
+      }
+      Serial.println(selection);
+      break;
+    case 3:     //put LED higher
+      Serial.println("put LED higher");
+      if (on && ledState[selection] < 6) {
+        ledState[selection]++;
+        shiftOutNumber[selection] = (128*pow(2, selection)) + numbers[ledState[selection]];
+      }
+      Serial.println(ledState[selection]);
+      Serial.println(shiftOutNumber[selection]);
+      break;
+    case 4:     //put LED lower
+      Serial.println("put LED lower");
+      if (ledState[selection] > 0) {
+        ledState[selection]--;
+        shiftOutNumber[selection] = (128*pow(2, selection)) + numbers[ledState[selection]];
+      }
+      Serial.println(ledState[selection]);
+      Serial.println(shiftOutNumber[selection]);
+      break;
+  }
+}
+
+void resetPinStates() {
+  for (int i = 0; i < ledPinsSize; i++) {
+    ledState[i] = 0;
+    shiftOutNumber[i] = numbers[0];
+  }
+}
+
+void loop() {
+  checkButtons();
+  displayLEDS();
+  displayDISPLAY();
+}
