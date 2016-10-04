@@ -127,8 +127,11 @@ void shiftOutNumber(number){
 }
 
 void display(displaynumber){
+int calcvar = 0;
+    for (i = 0; i <= displaynumber; i++){
+    calcvar += 128*Math.pow(2, displaynumber);
+    } 
     switch(ledState[displaynumber]{
-        int calcvar = 128*Math.pow(2, displaynumber);
         case 0
             shiftOutNumber(320+calcvar);
         break;
