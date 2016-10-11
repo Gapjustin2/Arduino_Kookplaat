@@ -1,4 +1,6 @@
 int ledPins[] = {11,10,A5,A4,A3,A2,A1,A0};
+int ledPinsSize = sizeof(ledPins) / sizeof(int);
+int ledState[] = {0, 0, 0, 0, 0, 0, 0, 0};
 int delayvar[] = {1,20,40,80,150,250,1000};
 int shiftOutNumbers[] = {320, 377, 292, 304, 281, 274, 258};
 int shiftOutVar[] = {128, 384, 896, 1920, 3968, 8064, 16256, 32640};
@@ -14,11 +16,11 @@ boolean on1 = true;
 boolean safetyOff0 = true;
 boolean safetyOff1 = true;
 
-int outputPins[] = {2, 5, 4, 6};
+int outputPins[] = {2, 4, 7, 8};
 int outputPinSize = sizeof(outputPins) / sizeof(int);
 int currentOutputPin = 0;
 
-int inputPins[] = {7, 8};
+int inputPins[] = {12, 13};
 int inputPinSize = sizeof(inputPins) / sizeof(int);
 
 int buttonsPressed[] = {0, 0, 0, 0, 0, 0, 0, 0};
@@ -54,7 +56,7 @@ void checkButtonsPressed() {
     if (buttonState == LOW) {
       buttonsPressed[place] = 1;
     } else {
-      if buttonsPressed[place] == 1 {
+      if (buttonsPressed[place] == 1) {
         clickButton(place);
       }
       buttonsPressed[place] = 0;
@@ -109,24 +111,24 @@ void clickButton(int x) {
         Serial.println(on0, on1);
         }
     break;
-    case 1:     //select right LED
-        if (safetyOff0 && plaatSelectie == 0 || safetyOff1 && plaatSelectie == 1){
-            Serial.println("select right LED");
-            if (selection < (ledPinsSize/2 - 1)+plaatSelectie*4) {
-            selection++;
-        } else {
-            selection = 0+plaatSelectie*4;
-        }
-        Serial.println(selection);
-        }
-    break;
-    case 2:     //select left LED
+    case 1:     //select left LED
         if (safetyOff0 && plaatSelectie == 0 || safetyOff1 && plaatSelectie == 1){
             Serial.println("select left LED");
             if (selection > 0+plaatSelectie*4) {
             selection--;
         } else {
             selection = (ledPinsSize/2-1)+plaatSelectie*4;
+        }
+        Serial.println(selection);
+        }
+    break;
+    case 2:     //select right LED
+        if (safetyOff0 && plaatSelectie == 0 || safetyOff1 && plaatSelectie == 1){
+            Serial.println("select right LED");
+            if (selection < (ledPinsSize/2 - 1)+plaatSelectie*4) {
+            selection++;
+        } else {
+            selection = 0+plaatSelectie*4;
         }
         Serial.println(selection);
         }
@@ -165,11 +167,10 @@ void clickButton(int x) {
 }
 
 void resetPinStates() {
-  for (int i = 0; i < ledPinsSize/2 + plaatSelectie*4; i++) {
+  for (int i = plaatSelectie*4; i < ledPinsSize/2 + plaatSelectie*4; i++) {
     ledState[i] = 0;
+    shiftOutArrayVar[i] = shiftOutNumbers[ledState[i]]+shiftOutVar[i];
   }
-  selection = 0;
-  plaatSelectie = 0;
 }
 
 void displayNumber(int list[]) {
