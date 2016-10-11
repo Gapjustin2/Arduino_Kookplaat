@@ -14,7 +14,8 @@ int latchPin = 5; //pin 12 of 595
 int dataPin = 3; //pin 14 on the 595
 int clockPin = 9; //pin 11 on the 595
 int plaatSelectie = 0;
-boolean on = true;
+boolean on0 = true;
+boolean on1 = true;
 boolean safetyOff0 = true;
 boolean safetyOff1 = true;
 
@@ -55,18 +56,27 @@ void checkButtons() {
 }
 
 void clickButton(int x) {
+  tone(6, 150, 100);
   Serial.println(selection);
   switch (x) {
     case 0:     //turn kookplaat on or off
         if (safetyOff0 && plaatSelectie == 0 || safetyOff1 && plaatSelectie == 1){
-        Serial.println("on/of");
-        if (on) {
-            on = false;
+        Serial.println("on/off");
+        if (on0 && plaatSelectie == 0 || on1 && plaatSelectie == 1) {
+            if (plaatSelectie == 0){
+            on0 = false;
+            } else {
+            on1 = false;
+            }
             resetPinStates();
         } else {
-            on = true;
+            if (plaatSelectie == 0){
+            on0 = true;
+            } else {
+            on1 = true;
+            }
         }
-        Serial.println(on);
+        Serial.println(on0, on1);
         }
     break;
     case 1:     //select right LED
@@ -94,7 +104,7 @@ void clickButton(int x) {
     case 3:     //put LED higher
         if (safetyOff0 && plaatSelectie == 0 || safetyOff1 && plaatSelectie == 1){
             Serial.println("put LED higher");
-            if (on && ledState[selection] < 6) {
+            if ((on0 && plaatSelectie == 0 || on1 && plaatSelectie == 1) && ledState[selection] < 6) {
                 ledState[selection]++;
                 shiftOutArrayVar[selection] = shiftOutNumbers[ledState[selection]]+shiftOutVar[selection];
             }
@@ -125,7 +135,7 @@ void clickButton(int x) {
 }
 
 void resetPinStates() {
-  for (int i = 0; i < ledPinsSize; i++) {
+  for (int i = 0; i < ledPinsSize/2 + plaatSelectie*4; i++) {
     ledState[i] = 0;
   }
   selection = 0;
